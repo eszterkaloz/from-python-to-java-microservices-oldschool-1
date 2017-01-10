@@ -3,6 +3,7 @@ package com.codecool.micro_services.video_service.youtube_service;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.util.StringUtils;
@@ -10,6 +11,9 @@ import org.thymeleaf.util.StringUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class YouTubeAPIService {
@@ -30,7 +34,7 @@ public class YouTubeAPIService {
         return INSTANCE;
     }
 
-    public String getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
+    public Map<String, String> getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
         logger.info("Getting a video from Youtube api");
         URIBuilder builder = new URIBuilder(API_URL);
 
@@ -47,7 +51,14 @@ public class YouTubeAPIService {
         logger.debug("Getting videos from Youtube for the following product: {}", productName);
         logger.debug("The built uri for the youtube api is {}", builder);
 
-        return execute(builder.build());
+        return getVideoFromYoutubeJSONParser(builder.build());
+    }
+
+    private Map<String, String> getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
+        String result = new JSONObject(execute(uri).getString("items.id.videoId"));
+        Map<String, String> videosByCategory = new HashMap<String, String>();
+        videosByCategory.put("category", result);
+        return videosByCategory;
     }
 
     private String execute(URI uri) throws IOException {
@@ -57,4 +68,5 @@ public class YouTubeAPIService {
                 .returnContent()
                 .asString();
     }
+
 }
