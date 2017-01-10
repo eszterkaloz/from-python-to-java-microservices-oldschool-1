@@ -1,6 +1,9 @@
 package com.codecool.micro_services.video_service;
 
 
+import spark.Request;
+import spark.Response;
+
 public class VideoAPIController {
 
     private static VideoAPIController INSTANCE;
@@ -11,4 +14,9 @@ public class VideoAPIController {
         }
         return INSTANCE;
     }
+
+    public String status(Request request, Response response) {
+        return "ok";
+    }
+
 }

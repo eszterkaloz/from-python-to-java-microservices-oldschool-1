@@ -20,7 +20,7 @@ public class Servlet {
         logger.debug("Starting " + Servlet.class.getName() + "...");
 
         Servlet application = new Servlet();
-        
+
         application.controller = VideoAPIController.getInstance();
 
         // --- EXCEPTION HANDLING ---
@@ -49,6 +49,8 @@ public class Servlet {
         templateResolver.setResourceResolver(new ClassLoaderResourceResolver());
 
         // --- ROUTES ---
+        get("/status", application.controller::status);
+
         //todo: define routes for videoapicontroller's methods
 
 
