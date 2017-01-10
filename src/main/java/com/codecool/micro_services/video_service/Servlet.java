@@ -1,6 +1,8 @@
 package com.codecool.micro_services.video_service;
 
 
+import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
+import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.resourceresolver.ClassLoaderResourceResolver;
@@ -21,7 +23,7 @@ public class Servlet {
 
         Servlet application = new Servlet();
 
-        application.controller = VideoAPIController.getInstance();
+        application.controller = new VideoAPIController(YouTubeAPIService.getInstance(), VimeoAPIService.getInstance());
 
         // --- EXCEPTION HANDLING ---
         exception(URISyntaxException.class, (exception, request, response) -> {
@@ -49,7 +51,7 @@ public class Servlet {
         templateResolver.setResourceResolver(new ClassLoaderResourceResolver());
 
         // --- ROUTES ---
-        get("/status", application.controller::status);
+        //get("/status", application.controller::status);
 
         //todo: define routes for videoapicontroller's methods
 
