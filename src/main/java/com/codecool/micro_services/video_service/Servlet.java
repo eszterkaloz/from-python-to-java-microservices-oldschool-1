@@ -13,10 +13,15 @@ import static spark.Spark.*;
 
 public class Servlet {
     private static final Logger logger = LoggerFactory.getLogger(Servlet.class);
+    private VideoAPIController controller;
     private static final int PORT = 9000;
 
     public static void main(String[] args) {
-        logger.debug("Starting server...");
+        logger.debug("Starting " + Servlet.class.getName() + "...");
+
+        Servlet application = new Servlet();
+        
+        application.controller = VideoAPIController.getInstance();
 
         // --- EXCEPTION HANDLING ---
         exception(URISyntaxException.class, (exception, request, response) -> {
@@ -30,7 +35,6 @@ public class Servlet {
             response.body(String.format("Unexpected error occurred: %s", exception.getMessage()));
             logger.error("Error while processing request", exception);
         });
-
 
         // --- SERVER SETUP ---
         staticFileLocation("/public");
