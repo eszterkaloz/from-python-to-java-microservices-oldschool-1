@@ -36,7 +36,7 @@ public class YouTubeAPIService {
         return INSTANCE;
     }
 
-    public Map<String, String> getVideoFromYoutube(String productName, String videoCategory) throws IOException, URISyntaxException {
+    public Map<String, String> getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
         logger.info("Getting a video from Youtube api");
         URIBuilder builder = new URIBuilder(API_URL);
 
@@ -44,7 +44,7 @@ public class YouTubeAPIService {
         builder.addParameter(TYPE_PARAM_KEY, "video");
 
         if (!StringUtils.isEmpty(productName)) {
-            builder.addParameter(QUERY_PARAM_KEY, productName + "+" + videoCategory);
+            builder.addParameter(QUERY_PARAM_KEY, productName );
         }
 
         builder.addParameter(MAX_RESULTS_PARAM_KEY, "1");
@@ -53,10 +53,10 @@ public class YouTubeAPIService {
         logger.debug("Getting videos from Youtube for the following product: {}", productName);
         logger.debug("The built uri for the youtube api is {}", builder);
 
-        return getVideoFromYoutubeJSONParser(builder.build(), videoCategory);
+        return getVideoFromYoutubeJSONParser(builder.build());
     }
 
-    private Map<String, String> getVideoFromYoutubeJSONParser(URI uri, String videoCategory) throws IOException, URISyntaxException{
+    private Map<String, String> getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
         String result = null;
         JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
 
@@ -71,7 +71,7 @@ public class YouTubeAPIService {
         }
 
         Map<String, String> videosByCategory = new HashMap<>();
-        videosByCategory.put(videoCategory, result);
+        videosByCategory.put("youtube", result);
         return videosByCategory;
     }
 
