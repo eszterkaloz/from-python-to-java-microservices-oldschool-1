@@ -14,6 +14,10 @@ public class VideoAPIController {
         }
         return INSTANCE;
     }
+//    todo: method that gets a product name as a query param --> 2 methods (one that calls youtubeapi, the other calls vimeo)
+
+
+//todo: method returns JSON - gets 2 hashmaps (youtube: *review (link) *unboxing (String link); vimeo (same))
 
     public String status(Request request, Response response) {
         return "ok";
