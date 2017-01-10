@@ -3,6 +3,7 @@ package com.codecool.micro_services.video_service;
 
 import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
 import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
+import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 
@@ -25,14 +26,16 @@ public class VideoAPIController {
 
     public Map<String,Map> getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
+        //todo: exceptions for wrong parameter
         videoLinksByService = new HashMap<>();
         videoLinksByService.put("youtube", youTubeAPIService.getVideoFromYoutube(searchKey));
         //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+        JSONObject json = new JSONObject();
+        json.put("result", videoLinksByService);
         return videoLinksByService;
     }
 
 
-    //    todo: method that gets a product name as a query param --> 2 methods (one that calls youtubeapi, the other calls vimeo)
 
 
 //todo: method returns JSON - gets 2 hashmaps (youtube: *review (link) *unboxing (String link); vimeo (same))

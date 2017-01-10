@@ -51,9 +51,7 @@ public class Servlet {
         templateResolver.setResourceResolver(new ClassLoaderResourceResolver());
 
         // --- ROUTES ---
-        //get("/status", application.controller::status);
-
-        //todo: define routes for videoapicontroller's methods
+        get("/apivideos", application.controller::getVideoLinks);
 
 
         logger.info("VideoAPIServer started on port " + PORT);
