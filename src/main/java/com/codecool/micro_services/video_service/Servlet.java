@@ -1,11 +1,12 @@
 package com.codecool.micro_services.video_service;
 
 
+import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
+import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.resourceresolver.ClassLoaderResourceResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
-import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import java.net.URISyntaxException;
 
 import static spark.Spark.*;
@@ -14,14 +15,14 @@ import static spark.Spark.*;
 public class Servlet {
     private static final Logger logger = LoggerFactory.getLogger(Servlet.class);
     private VideoAPIController controller;
-    private static final int PORT = 9000;
+    private static final int PORT = 60000;
 
     public static void main(String[] args) {
         logger.debug("Starting " + Servlet.class.getName() + "...");
 
         Servlet application = new Servlet();
 
-        application.controller = VideoAPIController.getInstance();
+        application.controller = new VideoAPIController(YouTubeAPIService.getInstance(), VimeoAPIService.getInstance());
 
         // --- EXCEPTION HANDLING ---
         exception(URISyntaxException.class, (exception, request, response) -> {
@@ -49,9 +50,7 @@ public class Servlet {
         templateResolver.setResourceResolver(new ClassLoaderResourceResolver());
 
         // --- ROUTES ---
-        get("/status", application.controller::status);
-
-        //todo: define routes for videoapicontroller's methods
+        get("/apivideos", application.controller::getVideoLinks);
 
 
         logger.info("VideoAPIServer started on port " + PORT);
