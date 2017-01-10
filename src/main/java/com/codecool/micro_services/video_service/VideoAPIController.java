@@ -24,17 +24,21 @@ public class VideoAPIController {
         this.vimeoAPIService = vimeoAPIService;
     }
 
-    public Map<String,Map> getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
+    public JSONObject getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
         //todo: exceptions for wrong parameter
         videoLinksByService = new HashMap<>();
         videoLinksByService.put("youtube", youTubeAPIService.getVideoFromYoutube(searchKey));
         //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
-        JSONObject json = new JSONObject();
-        json.put("result", videoLinksByService);
-        return videoLinksByService;
+
+        return resultToJSON();
     }
 
+    private JSONObject resultToJSON() {
+        JSONObject json = new JSONObject();
+        json.put("result", videoLinksByService);
+        return json;
+    }
 
 
 
