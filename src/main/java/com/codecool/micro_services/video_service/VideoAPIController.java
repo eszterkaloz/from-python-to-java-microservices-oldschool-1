@@ -9,6 +9,7 @@ import spark.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VideoAPIController {
