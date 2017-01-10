@@ -9,12 +9,11 @@ import spark.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class VideoAPIController {
     public static final String SEARCH_PARAM_KEY = "search";
-    private Map<String, Map> videoLinksByService ;
+    private Map<String, Map> videoLinksByService;
 
     private final YouTubeAPIService youTubeAPIService;
     private final VimeoAPIService vimeoAPIService;
@@ -35,14 +34,8 @@ public class VideoAPIController {
     }
 
     private JSONObject resultToJSON() {
-        JSONObject json = new JSONObject();
-        json.put("result", videoLinksByService);
-        return json;
+        return new JSONObject().put("result", videoLinksByService);
     }
-
-
-
-//todo: method returns JSON - gets 2 hashmaps (youtube: *review (link) *unboxing (String link); vimeo (same))
 
     public String status(Request request, Response response) {
         return "ok";
