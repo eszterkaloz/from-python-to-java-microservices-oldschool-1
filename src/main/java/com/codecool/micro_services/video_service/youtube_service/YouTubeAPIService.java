@@ -3,6 +3,7 @@ package com.codecool.micro_services.video_service.youtube_service;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,15 @@ public class YouTubeAPIService {
     }
 
     private Map<String, String> getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
-        String result = new JSONObject(execute(uri)).getString("items.id.videoId");
+        String result="hello";
+        JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
+        for(int i = 0 ; i < items.length() ; i++){
+            JSONObject p = (JSONObject)items.get(i);
+            JSONObject id = p.getJSONObject("id");
+            result = id.getString("videoId");
+
+        }
+
         Map<String, String> videosByCategory = new HashMap<>();
         //todo: handle bad response
         videosByCategory.put("category", result);
