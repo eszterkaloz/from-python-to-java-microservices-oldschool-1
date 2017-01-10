@@ -9,6 +9,7 @@ import spark.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VideoAPIController {
@@ -26,9 +27,9 @@ public class VideoAPIController {
     public JSONObject getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
         //todo: exceptions for wrong parameter
-        videoLinksByService = new HashMap<>();
-        videoLinksByService.put("youtube", youTubeAPIService.getVideoFromYoutube(searchKey));
-        //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+        videoLinksByService = new HashMap();
+        //videoLinksByService.put("youtube", youTubeAPIService.getVideoFromYoutube(searchKey));
+        videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
 
         return resultToJSON();
     }

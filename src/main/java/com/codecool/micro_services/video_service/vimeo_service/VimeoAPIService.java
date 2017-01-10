@@ -47,17 +47,18 @@ public class VimeoAPIService {
         uriBuilder.addParameter("sort", "relevant");
         uriBuilder.addParameter("direction", "asc"); //optional
 
+        logger.debug("URI prepared for request: {}", uriBuilder.toString());
         String response = execute(uriBuilder.build());
-
+        logger.debug("HTTP response received: {}", response);
         String link = getLinkFromJSON(response);
+        logger.debug("Link from Vimeo response JSON: {}", link);
 
         return link;
     }
 
     private String execute(URI uri) throws IOException {
         return Request.Get(uri)
-                .addHeader("Autorization", AUTH_TOKEN)
-                .addHeader("Accept", "text/plain")
+                .addHeader("Authorization", AUTH_TOKEN)
                 .execute()
                 .returnContent()
                 .asString();
@@ -65,6 +66,6 @@ public class VimeoAPIService {
 
     private String getLinkFromJSON(String jsonString) {
 // FIXME: implement method
-        return "https://vimeo.com/fubiztv/fubiztalks";
+        return jsonString;
     }
 }
