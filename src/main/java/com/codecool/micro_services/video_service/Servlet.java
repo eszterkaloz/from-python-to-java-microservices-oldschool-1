@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.resourceresolver.ClassLoaderResourceResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
-import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import java.net.URISyntaxException;
 
 import static spark.Spark.*;
@@ -16,7 +15,7 @@ import static spark.Spark.*;
 public class Servlet {
     private static final Logger logger = LoggerFactory.getLogger(Servlet.class);
     private VideoAPIController controller;
-    private static final int PORT = 9000;
+    private static final int PORT = 60000;
 
     public static void main(String[] args) {
         logger.debug("Starting " + Servlet.class.getName() + "...");
