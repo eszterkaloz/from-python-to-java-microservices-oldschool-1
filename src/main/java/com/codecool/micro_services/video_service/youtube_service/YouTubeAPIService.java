@@ -4,6 +4,7 @@ package com.codecool.micro_services.video_service.youtube_service;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class YouTubeAPIService {
         return INSTANCE;
     }
 
-    public Map<String, String> getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
+    public Map<String, String> getVideoFromYoutube(String productName, String videoCategory) throws IOException, URISyntaxException {
         logger.info("Getting a video from Youtube api");
         URIBuilder builder = new URIBuilder(API_URL);
 
@@ -43,7 +44,7 @@ public class YouTubeAPIService {
         builder.addParameter(TYPE_PARAM_KEY, "video");
 
         if (!StringUtils.isEmpty(productName)) {
-            builder.addParameter(QUERY_PARAM_KEY, productName);
+            builder.addParameter(QUERY_PARAM_KEY, productName + "+" + videoCategory);
         }
 
         builder.addParameter(MAX_RESULTS_PARAM_KEY, "1");
@@ -52,22 +53,25 @@ public class YouTubeAPIService {
         logger.debug("Getting videos from Youtube for the following product: {}", productName);
         logger.debug("The built uri for the youtube api is {}", builder);
 
-        return getVideoFromYoutubeJSONParser(builder.build());
+        return getVideoFromYoutubeJSONParser(builder.build(), videoCategory);
     }
 
-    private Map<String, String> getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
-        String result=null;
+    private Map<String, String> getVideoFromYoutubeJSONParser(URI uri, String videoCategory) throws IOException, URISyntaxException{
+        String result = null;
         JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
-        for(int i = 0 ; i < items.length() ; i++){
-            JSONObject p = (JSONObject)items.get(i);
-            JSONObject id = p.getJSONObject("id");
-            result = id.getString("videoId");
 
+        try {
+            for(int i = 0 ; i < items.length() ; i++){
+                JSONObject id = ((JSONObject)items.get(i)).getJSONObject("id");
+                result = id.getString("videoId");
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            logger.error("JSONException found, there might not be a video linked to this search word");
         }
 
         Map<String, String> videosByCategory = new HashMap<>();
-        //todo: handle bad response
-        videosByCategory.put("category", result);
+        videosByCategory.put(videoCategory, result);
         return videosByCategory;
     }
 
