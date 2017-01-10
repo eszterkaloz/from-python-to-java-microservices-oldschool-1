@@ -56,7 +56,7 @@ public class YouTubeAPIService {
     }
 
     private Map<String, String> getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
-        String result="hello";
+        String result=null;
         JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
         for(int i = 0 ; i < items.length() ; i++){
             JSONObject p = (JSONObject)items.get(i);

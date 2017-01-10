@@ -9,11 +9,11 @@ import spark.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class VideoAPIController {
     public static final String SEARCH_PARAM_KEY = "search";
+    public static final List<String> VIDEO_CATEGORIES = Arrays.asList("unboxing", "review");
     private Map<String, Map> videoLinksByService;
 
     private final YouTubeAPIService youTubeAPIService;
@@ -28,8 +28,14 @@ public class VideoAPIController {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
         //todo: exceptions for wrong parameter
         videoLinksByService = new HashMap<>();
-        videoLinksByService.put("youtube", youTubeAPIService.getVideoFromYoutube(searchKey));
-        //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+        Map<String, String> videosByCategory = new HashMap<>();
+        videoLinksByService.put("youtube", videosByCategory);
+        for (int i = 0; i < VIDEO_CATEGORIES.size(); i++) {
+
+            videoLinksByService.put(VIDEO_CATEGORIES.get(i), youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i)));
+            //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+
+        }
 
         return resultToJSON();
     }
