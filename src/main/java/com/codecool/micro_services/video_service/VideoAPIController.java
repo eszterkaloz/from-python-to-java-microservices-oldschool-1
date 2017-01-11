@@ -26,7 +26,7 @@ public class VideoAPIController {
 
     public String getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
-
+        response.type("application/json");
         if (searchKey.length() <= 2) {
             response.status(400);
             String errorContent = new JSONObject()
