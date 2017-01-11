@@ -1,21 +1,24 @@
-package com.codecool.micro_services.video_service.com.codecool.micro_services.test_video_service;
+package com.codecool.micro_services.video_service;
 
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 
 public class VideoAPIControllerTest {
-    @org.junit.Before
+    @Before
     public void setUp() throws Exception {
 
     }
 
-    @org.junit.After
+    @After
     public void tearDown() throws Exception {
 
     }
 
-    @org.junit.Test
+    @Test
     public void getVideoLinks() throws Exception {
 
     }
