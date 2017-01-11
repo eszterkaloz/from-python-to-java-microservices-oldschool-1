@@ -34,19 +34,19 @@ public class VideoAPIController {
 
         for (int i = 0; i < VIDEO_CATEGORIES.size(); i++) {
 
-            embedCode = youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i));
+            embedCode = youTubeAPIService.getVideoFromYoutube(searchKey + "+" + VIDEO_CATEGORIES.get(i));
             videos.add(responseBuilder(searchKey, embedCode, "youtube", VIDEO_CATEGORIES.get(i)));
 
-//            embedCode = vimeoAPIService.getVideosFromVimeo(searchKey+"+"+ VIDEO_CATEGORIES.get(i));
-//            videos.add(responseBuilder(searchKey, embedCode, "vimeo", VIDEO_CATEGORIES.get(i)));
+            embedCode = vimeoAPIService.getVideoFromVimeo(searchKey + "+" + VIDEO_CATEGORIES.get(i));
+            videos.add(responseBuilder(searchKey, embedCode, "vimeo", VIDEO_CATEGORIES.get(i)));
 
         }
 
         return resultToJSON();
     }
 
-    private String responseBuilder(String title, String embedCode, String provider, String category){
-        return "{\"title\":\""+title+"\",\"embed code\":\""+embedCode+"\",\"provider\":\""+provider+"\",\"category\":\""+ category+"\"}";
+    private String responseBuilder(String title, String embedCode, String provider, String category) {
+        return "{\"title\":\"" + title + "\",\"embed code\":\"" + embedCode + "\",\"provider\":\"" + provider + "\",\"category\":\"" + category + "\"}";
     }
 
     private JSONObject resultToJSON() {
