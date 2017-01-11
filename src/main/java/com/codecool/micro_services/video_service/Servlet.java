@@ -28,20 +28,20 @@ public class Servlet {
         // --- EXCEPTION HANDLING ---
         exception(URISyntaxException.class, (exception, request, response) -> {
             response.status(500);
-            JSONObject errorContent = new JSONObject();
-            errorContent.put("error_type", "URI building error, maybe wrong format?");
-            errorContent.put("error_code", 500);
-            errorContent.put("error_message", exception.getMessage());
+            JSONObject errorContent = new JSONObject()
+                    .put("error_type", "URI building error, maybe wrong format?")
+                    .put("error_code", 500)
+                    .put("error_message", exception.getMessage());
             response.body(new JSONObject().put("error", errorContent).toString());
             logger.error("Error while processing request", exception);
         });
 
         exception(Exception.class, (exception, request, response) -> {
             response.status(500);
-            JSONObject errorContent = new JSONObject();
-            errorContent.put("error_type", "Unexpected error occurred");
-            errorContent.put("error_code", 500);
-            errorContent.put("error_message", exception.getMessage());
+            JSONObject errorContent = new JSONObject()
+                    .put("error_type", "Unexpected error occurred")
+                    .put("error_code", 500)
+                    .put("error_message", exception.getMessage());
             response.body(new JSONObject().put("error", errorContent).toString());
             logger.error("Error while processing request", exception);
         });
