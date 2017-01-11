@@ -3,7 +3,9 @@ package com.codecool.micro_services.video_service;
 
 import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
 import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
+
 import org.json.JSONObject;
+
 import spark.Request;
 import spark.Response;
 
@@ -28,29 +30,29 @@ public class VideoAPIController {
 
     public JSONObject getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
-        //todo: exceptions for wrong parameter
-        videos = new ArrayList<String>();
-        String embedCode = null;
 
-        for (int i = 0; i < VIDEO_CATEGORIES.size(); i++) {
-
-            embedCode = youTubeAPIService.getVideoFromYoutube(searchKey + "+" + VIDEO_CATEGORIES.get(i));
-            videos.add(responseBuilder(searchKey, embedCode, "youtube", VIDEO_CATEGORIES.get(i)));
-
-            embedCode = vimeoAPIService.getVideoFromVimeo(searchKey + "+" + VIDEO_CATEGORIES.get(i));
-            videos.add(responseBuilder(searchKey, embedCode, "vimeo", VIDEO_CATEGORIES.get(i)));
-
+        if (searchKey.length() <= 2) {
+            response.status(400);
+            JSONObject errorContent = new JSONObject()
+                    .put("error_type", "Bad request. Request parameter is missing or too low?")
+                    .put("error_code", 400);
+            return new JSONObject().put("error", errorContent);
         }
 
-        return resultToJSON();
+        videos = new ArrayList<>();
+        for (String category : VIDEO_CATEGORIES) {
+            String embedCodeForYoutube = youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category);
+            videos.add(responseBuilder(searchKey, embedCodeForYoutube, "youtube", category));
+
+            String embedCodeForVimeo = vimeoAPIService.getVideoFromVimeo(searchKey + "+" + category);
+            videos.add(responseBuilder(searchKey, embedCodeForVimeo, "vimeo", category));
+        }
+
+        return new JSONObject().put("result", videos);
     }
 
     private String responseBuilder(String title, String embedCode, String provider, String category) {
         return "{\"title\":\"" + title + "\",\"embed code\":\"" + embedCode + "\",\"provider\":\"" + provider + "\",\"category\":\"" + category + "\"}";
-    }
-
-    private JSONObject resultToJSON() {
-        return new JSONObject().put("result", videos);
     }
 
     public String status(Request request, Response response) {

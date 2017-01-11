@@ -4,6 +4,7 @@ package com.codecool.micro_services.video_service;
 import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
 import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +28,21 @@ public class Servlet {
         // --- EXCEPTION HANDLING ---
         exception(URISyntaxException.class, (exception, request, response) -> {
             response.status(500);
-            response.body(String.format("URI building error, maybe wrong format? : %s", exception.getMessage()));
+            JSONObject errorContent = new JSONObject()
+                    .put("error_type", "URI building error, maybe wrong format?")
+                    .put("error_code", 500)
+                    .put("error_message", exception.getMessage());
+            response.body(new JSONObject().put("error", errorContent).toString());
             logger.error("Error while processing request", exception);
         });
 
         exception(Exception.class, (exception, request, response) -> {
             response.status(500);
-            response.body(String.format("Unexpected error occurred: %s", exception.getMessage()));
+            JSONObject errorContent = new JSONObject()
+                    .put("error_type", "Unexpected error occurred")
+                    .put("error_code", 500)
+                    .put("error_message", exception.getMessage());
+            response.body(new JSONObject().put("error", errorContent).toString());
             logger.error("Error while processing request", exception);
         });
 
