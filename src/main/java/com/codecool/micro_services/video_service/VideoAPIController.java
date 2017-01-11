@@ -25,13 +25,13 @@ public class VideoAPIController {
 
     public String getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
+        Map<String, List<String>> result = new HashMap<>();
         response.type("application/json");
         if (searchKey.length() <= 2) {
             response.status(400);
-            String errorContent = new JSONObject()
+            return new JSONObject()
                     .put("error_type", "Bad request. Request parameter is missing or too low?")
                     .put("error_code", 400).toString();
-            return errorContent;
         }
 
         videos = new ArrayList<>();
@@ -42,8 +42,8 @@ public class VideoAPIController {
             String embedCodeForVimeo = vimeoAPIService.getVideoFromVimeo(searchKey + "+" + category);
             videos.add(responseBuilder(searchKey, embedCodeForVimeo, "vimeo", category));
         }
-
-        return new HashMap<String, List<String>>().put("result", videos).toString();
+        result.put("result", videos);
+        return result.toString();
     }
 
 
