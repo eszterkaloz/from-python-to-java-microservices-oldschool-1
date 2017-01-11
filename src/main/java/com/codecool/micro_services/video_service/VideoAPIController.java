@@ -9,7 +9,9 @@ import spark.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class VideoAPIController {
     public static final String SEARCH_PARAM_KEY = "search";
