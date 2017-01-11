@@ -28,33 +28,24 @@ public class VimeoAPIService {
         return INSTANCE;
     }
 
-    public Map<String, String> getVideosFromVimeo(String productName) throws IOException, URISyntaxException {
-        String reviewLink = getVideoLinkFor(productName, "review");
-        String unboxingLink = getVideoLinkFor(productName, "unboxing");
-
-        Map<String, String> vimeoEmbedCodes = new HashMap<String, String>();
-        vimeoEmbedCodes.put("review", reviewLink);
-        vimeoEmbedCodes.put("unboxing", unboxingLink);
-
-        return vimeoEmbedCodes;
-    }
-
-    private String getVideoLinkFor(String productName, String category) throws URISyntaxException, IOException {
+    public String getVideoFromVimeo(String searchExpression) throws IOException, URISyntaxException {
         URIBuilder uriBuilder = new URIBuilder(API_URL);
         uriBuilder.addParameter("page", "1");  //optional
         uriBuilder.addParameter("per_page", "1"); //optional
-        uriBuilder.addParameter("query", productName + " " + category);
+        uriBuilder.addParameter("query", searchExpression);
         uriBuilder.addParameter("sort", "relevant");
         uriBuilder.addParameter("direction", "asc"); //optional
-
         logger.debug("URI prepared for request: {}", uriBuilder.toString());
+
         String response = execute(uriBuilder.build());
         logger.debug("HTTP response received: {}", response);
-        String link = getLinkFromJSON(response);
-        logger.debug("Link from Vimeo response JSON: {}", link);
 
-        return link;
+        String embedCode = getLinkFromJSON(response);
+        logger.debug("Link from Vimeo response JSON: {}", embedCode);
+
+        return embedCode;
     }
+
 
     private String execute(URI uri) throws IOException {
         return Request.Get(uri)

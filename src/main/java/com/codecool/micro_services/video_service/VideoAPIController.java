@@ -9,7 +9,9 @@ import spark.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class VideoAPIController {
     public static final String SEARCH_PARAM_KEY = "search";
@@ -31,8 +33,8 @@ public class VideoAPIController {
 
         for (int i = 0; i < VIDEO_CATEGORIES.size(); i++) {
 
-            videos.add(youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i)));
-            //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+            videos.add(youTubeAPIService.getVideoFromYoutube(searchKey + "+" + VIDEO_CATEGORIES.get(i)));
+            videos.add(vimeoAPIService.getVideoFromVimeo(searchKey + "+" + VIDEO_CATEGORIES.get(i)));
 
         }
 
