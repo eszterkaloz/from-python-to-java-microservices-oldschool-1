@@ -28,15 +28,23 @@ public class VideoAPIController {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
         //todo: exceptions for wrong parameter
         videos = new ArrayList<String>();
+        String embedCode = null;
 
         for (int i = 0; i < VIDEO_CATEGORIES.size(); i++) {
 
-            videos.add(youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i)));
-            //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+            embedCode = youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i));
+            videos.add(responseBuilder(searchKey, embedCode, "youtube", VIDEO_CATEGORIES.get(i)));
+
+//            embedCode = vimeoAPIService.getVideosFromVimeo(searchKey+"+"+ VIDEO_CATEGORIES.get(i));
+//            videos.add(responseBuilder(searchKey, embedCode, "vimeo", VIDEO_CATEGORIES.get(i)));
 
         }
 
         return resultToJSON();
+    }
+
+    private String responseBuilder(String title, String embedCode, String provider, String category){
+        return "{\"title\":\""+title+"\",\"embed code\":\""+embedCode+"\",\"provider\":\""+provider+"\",\"category\":\""+ category+"\"}";
     }
 
     private JSONObject resultToJSON() {

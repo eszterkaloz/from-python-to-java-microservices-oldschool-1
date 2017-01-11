@@ -59,7 +59,6 @@ public class YouTubeAPIService {
     private String getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
         String result = null;
         JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
-
         try {
             for(int i = 0 ; i < items.length() ; i++){
                 JSONObject id = ((JSONObject)items.get(i)).getJSONObject("id");
@@ -69,8 +68,9 @@ public class YouTubeAPIService {
             ex.printStackTrace();
             logger.error("JSONException found, there might not be a video linked to this search word");
         }
+        String embed = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+result+"\" frameborder=\"0\" allowfullscreen></iframe>";
 
-        return result;
+        return embed;
     }
 
     private String execute(URI uri) throws IOException {
