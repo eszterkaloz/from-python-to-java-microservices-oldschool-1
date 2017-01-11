@@ -8,6 +8,8 @@ import static org.junit.Assert.*;
 
 
 public class VimeoAPIServiceTest {
+
+
     @Before
     public void setUp() throws Exception {
 
