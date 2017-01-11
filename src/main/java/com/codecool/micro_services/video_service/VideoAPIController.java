@@ -14,10 +14,9 @@ import java.util.*;
 public class VideoAPIController {
     public static final String SEARCH_PARAM_KEY = "search";
     public static final List<String> VIDEO_CATEGORIES = Arrays.asList("unboxing", "review");
-    private List<String> videos;
-
     private final YouTubeAPIService youTubeAPIService;
     private final VimeoAPIService vimeoAPIService;
+    private List<String> videos;
 
     public VideoAPIController(YouTubeAPIService youTubeAPIService, VimeoAPIService vimeoAPIService) {
         this.youTubeAPIService = youTubeAPIService;
@@ -29,10 +28,10 @@ public class VideoAPIController {
         response.type("application/json");
         if (searchKey.length() <= 2) {
             response.status(400);
-            JSONObject errorContent = new JSONObject()
+            String errorContent = new JSONObject()
                     .put("error_type", "Bad request. Request parameter is missing or too low?")
-                    .put("error_code", 400);
-            return errorContent.toString();
+                    .put("error_code", 400).toString();
+            return errorContent;
         }
 
         videos = new ArrayList<>();
