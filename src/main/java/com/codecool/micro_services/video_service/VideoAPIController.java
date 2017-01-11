@@ -26,27 +26,24 @@ public class VideoAPIController {
         this.vimeoAPIService = vimeoAPIService;
     }
 
-    public JSONObject getVideoLinks(Request request, Response response, Exception exception) throws IOException, URISyntaxException {
+    public JSONObject getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
-        JSONObject result = new JSONObject();
 
         if (searchKey.length() <= 2) {
             response.status(400);
             JSONObject errorContent = new JSONObject()
                     .put("error_type", "Bad request. Request parameter is missing or too low?")
-                    .put("error_code", 400)
-                    .put("error_message", exception.getMessage());
-            result.put("error", errorContent);
-        } else {
-            videos = new ArrayList<>();
-            for (String category : VIDEO_CATEGORIES) {
-                videos.add(youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category));
-                //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
-                result.put("result", videos);
-            }
+                    .put("error_code", 400);
+            return new JSONObject().put("error", errorContent);
         }
 
-        return result;
+        videos = new ArrayList<>();
+        for (String category : VIDEO_CATEGORIES) {
+            videos.add(youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category));
+            //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+        }
+
+        return new JSONObject().put("result", videos);
     }
 
     public String status(Request request, Response response) {
