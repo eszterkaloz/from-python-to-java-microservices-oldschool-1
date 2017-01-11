@@ -23,6 +23,7 @@ public class VideoAPIController {
         this.vimeoAPIService = vimeoAPIService;
     }
 
+    // todo: controller's resp.: validate queryparam - returns what the service object gives back (in the desired format (eg. json))
     public String getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
         Map<String, List<String>> result = new HashMap<>();
@@ -34,6 +35,7 @@ public class VideoAPIController {
                     .put("error_code", 400).toString();
         }
 
+        // todo: this is not the responsibility of the controller - another service layer (communicates in JAVA)
         videos = new ArrayList<>();
         for (String category : VIDEO_CATEGORIES) {
             String embedCodeForYoutube = youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category);
