@@ -3,14 +3,14 @@ package com.codecool.micro_services.video_service.vimeo_service;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 // TODO: proper logging
 
@@ -57,6 +57,13 @@ public class VimeoAPIService {
 
     private String getLinkFromJSON(String jsonString) {
 // FIXME: implement method
-        return jsonString;
+        JSONObject json = new JSONObject(jsonString);
+        JSONArray dataArray = (JSONArray) json.get("data");
+        JSONObject video = (JSONObject) dataArray.get(0);
+        JSONObject embed = (JSONObject) video.get("embed");
+
+        System.out.println(embed.get("html").toString());
+
+        return embed.get("html").toString();
     }
 }
