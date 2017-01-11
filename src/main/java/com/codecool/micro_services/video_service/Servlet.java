@@ -3,10 +3,10 @@ package com.codecool.micro_services.video_service;
 
 import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
 import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thymeleaf.resourceresolver.ClassLoaderResourceResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+
 import java.net.URISyntaxException;
 
 import static spark.Spark.*;
@@ -15,7 +15,7 @@ import static spark.Spark.*;
 public class Servlet {
     private static final Logger logger = LoggerFactory.getLogger(Servlet.class);
     private VideoAPIController controller;
-    private static final int PORT = 60000;
+    private static final int DEFAULT_PORT = 60000;
 
     public static void main(String[] args) {
         logger.debug("Starting " + Servlet.class.getName() + "...");
@@ -39,20 +39,25 @@ public class Servlet {
 
         // --- SERVER SETUP ---
         staticFileLocation("/public");
-        port(PORT);
-
-        // --- TEMPLATE ENGINE ---
-        TemplateResolver templateResolver = new TemplateResolver();
-        templateResolver.setTemplateMode("HTML5");
-        templateResolver.setPrefix("templates/payment/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setCacheTTLMs(3600000L);
-        templateResolver.setResourceResolver(new ClassLoaderResourceResolver());
+        setup(args);
 
         // --- ROUTES ---
         get("/apivideos", application.controller::getVideoLinks);
 
+    }
 
-        logger.info("VideoAPIServer started on port " + PORT);
+    private static void setup(String[] args) {
+        if (args == null || args.length == 0) {
+            port(DEFAULT_PORT);
+            logger.info("VideoAPIServer started on port " + DEFAULT_PORT);
+        } else {
+            try {
+                port(Integer.parseInt(args[0]));
+                logger.info("VideoAPIServer started on port " + args[0]);
+            } catch (NumberFormatException e) {
+                logger.error("Invalid port given '{}', it should be number.", args[0]);
+                System.exit(-1);
+            }
+        }
     }
 }
