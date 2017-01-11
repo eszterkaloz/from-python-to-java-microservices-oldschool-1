@@ -3,7 +3,9 @@ package com.codecool.micro_services.video_service;
 
 import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
 import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
+
 import org.json.JSONObject;
+
 import spark.Request;
 import spark.Response;
 
@@ -24,23 +26,27 @@ public class VideoAPIController {
         this.vimeoAPIService = vimeoAPIService;
     }
 
-    public JSONObject getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
+    public JSONObject getVideoLinks(Request request, Response response, Exception exception) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
-        //todo: exceptions for wrong parameter
-        videos = new ArrayList<String>();
+        JSONObject result = new JSONObject();
 
-        for (int i = 0; i < VIDEO_CATEGORIES.size(); i++) {
-
-            videos.add(youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i)));
-            //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
-
+        if (searchKey.length() <= 2) {
+            response.status(400);
+            JSONObject errorContent = new JSONObject()
+                    .put("error_type", "Bad request. Request parameter is missing or too low?")
+                    .put("error_code", 400)
+                    .put("error_message", exception.getMessage());
+            result.put("error", errorContent);
+        } else {
+            videos = new ArrayList<>();
+            for (String category : VIDEO_CATEGORIES) {
+                videos.add(youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category));
+                //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+                result.put("result", videos);
+            }
         }
 
-        return resultToJSON();
-    }
-
-    private JSONObject resultToJSON() {
-        return new JSONObject().put("result", videos);
+        return result;
     }
 
     public String status(Request request, Response response) {
