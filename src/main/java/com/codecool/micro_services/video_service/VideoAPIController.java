@@ -3,6 +3,7 @@ package com.codecool.micro_services.video_service;
 
 import com.codecool.micro_services.video_service.vimeo_service.VimeoAPIService;
 import com.codecool.micro_services.video_service.youtube_service.YouTubeAPIService;
+import org.json.JSONException;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -41,22 +42,25 @@ public class VideoAPIController {
             String embedCodeForYoutube = youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category);
             videos.add(responseBuilder(searchKey, embedCodeForYoutube, "youtube", category));
 
-            String embedCodeForVimeo = vimeoAPIService.getVideoFromVimeo(searchKey + "+" + category);
-            videos.add(responseBuilder(searchKey, embedCodeForVimeo, "vimeo", category));
+            try {
+                String embedCodeForVimeo = vimeoAPIService.getVideoFromVimeo(searchKey + "+" + category);
+                videos.add(responseBuilder(searchKey, embedCodeForVimeo, "vimeo", category));
+            } catch (JSONException e) {
+                System.err.println("No video found on Vimeo");
+            }
         }
         result.put("result", videos);
         return result.toString();
     }
 
 
-    private String responseBuilder(String title, String embedCode, String provider, String category){
+    private String responseBuilder(String title, String embedCode, String provider, String category) {
         return new JSONObject()
                 .put("title", title)
                 .put("embed code", embedCode)
                 .put("provider", provider)
                 .put("category", category).toString();
     }
-
 
 
 }
