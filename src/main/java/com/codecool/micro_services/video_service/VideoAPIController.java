@@ -29,10 +29,10 @@ public class VideoAPIController {
         response.type("application/json");
         if (searchKey.length() <= 2) {
             response.status(400);
-            String errorContent = new JSONObject()
+            JSONObject errorContent = new JSONObject()
                     .put("error_type", "Bad request. Request parameter is missing or too low?")
-                    .put("error_code", 400).toString();
-            return errorContent;
+                    .put("error_code", 400);
+            return errorContent.toString();
         }
 
         videos = new ArrayList<>();
@@ -44,24 +44,16 @@ public class VideoAPIController {
             videos.add(responseBuilder(searchKey, embedCodeForVimeo, "vimeo", category));
         }
 
-        return resultToJSON().toString();
+        return new HashMap<String, List<String>>().put("result", videos).toString();
     }
 
 
     private String responseBuilder(String title, String embedCode, String provider, String category){
-
-        return  new JSONObject()
+        return new JSONObject()
                 .put("title", title)
                 .put("embed code", embedCode)
                 .put("provider", provider)
                 .put("category", category).toString();
-        //return "{\"title\":\""+title+"\",\"embed code\":\""+embedCode+"\",\"provider\":\""+provider+"\",\"category\":\""+ category+"\"}";
-    }
-
-    private Map<String, List<String>> resultToJSON() {
-        Map<String, List<String>> result = new HashMap<>();
-        result.put("result", videos);
-        return result;
     }
 
     public String status(Request request, Response response) {
