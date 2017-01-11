@@ -55,8 +55,6 @@ public class VideoAPIController {
                 .put("category", category).toString();
     }
 
-    public String status(Request request, Response response) {
-        return "ok";
-    }
+
 
 }
