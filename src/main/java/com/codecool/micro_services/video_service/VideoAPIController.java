@@ -44,7 +44,7 @@ public class VideoAPIController {
             videos.add(responseBuilder(searchKey, embedCodeForVimeo, "vimeo", category));
         }
 
-        return new JSONObject().put("result", videos).toString();
+        return new HashMap<String, List<String>>().put("result", videos).toString();
     }
 
 
