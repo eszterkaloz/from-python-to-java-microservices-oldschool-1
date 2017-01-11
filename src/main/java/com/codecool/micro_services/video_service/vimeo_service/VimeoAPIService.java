@@ -56,13 +56,10 @@ public class VimeoAPIService {
     }
 
     private String getLinkFromJSON(String jsonString) {
-// FIXME: implement method
         JSONObject json = new JSONObject(jsonString);
         JSONArray dataArray = (JSONArray) json.get("data");
         JSONObject video = (JSONObject) dataArray.get(0);
         JSONObject embed = (JSONObject) video.get("embed");
-
-        System.out.println(embed.get("html").toString());
 
         return embed.get("html").toString();
     }
