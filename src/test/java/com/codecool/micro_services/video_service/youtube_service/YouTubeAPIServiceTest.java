@@ -31,7 +31,6 @@ public class YouTubeAPIServiceTest {
     public void getVideoFromYoutube() throws Exception {
         String videoId = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Yi9RElWqixA\" frameborder=\"0\" allowfullscreen></iframe>";
         Assert.assertEquals(youTubeAPIService.getVideoFromYoutube("iphone"),videoId);
-
     }
 
 }
