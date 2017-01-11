@@ -11,7 +11,9 @@ import spark.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class VideoAPIController {
     public static final String SEARCH_PARAM_KEY = "search";
@@ -39,11 +41,19 @@ public class VideoAPIController {
 
         videos = new ArrayList<>();
         for (String category : VIDEO_CATEGORIES) {
-            videos.add(youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category));
-            //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
+            String embedCode = youTubeAPIService.getVideoFromYoutube(searchKey + "+" + category);
+            videos.add(responseBuilder(searchKey, embedCode, "youtube", category));
+
+//            embedCode = vimeoAPIService.getVideosFromVimeo(searchKey + "+" + category);
+//            videos.add(responseBuilder(searchKey, embedCode, "vimeo", category));
+
         }
 
         return new JSONObject().put("result", videos);
+    }
+
+    private String responseBuilder(String title, String embedCode, String provider, String category){
+        return "{\"title\":\""+title+"\",\"embed code\":\""+embedCode+"\",\"provider\":\""+provider+"\",\"category\":\""+ category+"\"}";
     }
 
     public String status(Request request, Response response) {
