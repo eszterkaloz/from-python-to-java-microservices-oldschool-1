@@ -3,6 +3,8 @@ package com.codecool.micro_services.video_service.youtube_service;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,7 @@ public class YouTubeAPIService {
         return INSTANCE;
     }
 
-    public Map<String, String> getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
+    public String getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
         logger.info("Getting a video from Youtube api");
         URIBuilder builder = new URIBuilder(API_URL);
 
@@ -42,7 +44,7 @@ public class YouTubeAPIService {
         builder.addParameter(TYPE_PARAM_KEY, "video");
 
         if (!StringUtils.isEmpty(productName)) {
-            builder.addParameter(QUERY_PARAM_KEY, productName);
+            builder.addParameter(QUERY_PARAM_KEY, productName );
         }
 
         builder.addParameter(MAX_RESULTS_PARAM_KEY, "1");
@@ -54,12 +56,21 @@ public class YouTubeAPIService {
         return getVideoFromYoutubeJSONParser(builder.build());
     }
 
-    private Map<String, String> getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
-        String result = new JSONObject(execute(uri)).getString("items.id.videoId");
-        Map<String, String> videosByCategory = new HashMap<>();
-        //todo: handle bad response
-        videosByCategory.put("category", result);
-        return videosByCategory;
+    private String getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
+        String result = null;
+        JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
+
+        try {
+            for(int i = 0 ; i < items.length() ; i++){
+                JSONObject id = ((JSONObject)items.get(i)).getJSONObject("id");
+                result = id.getString("videoId");
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            logger.error("JSONException found, there might not be a video linked to this search word");
+        }
+
+        return result;
     }
 
     private String execute(URI uri) throws IOException {
