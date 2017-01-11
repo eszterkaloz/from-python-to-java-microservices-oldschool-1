@@ -14,7 +14,7 @@ import java.util.*;
 public class VideoAPIController {
     public static final String SEARCH_PARAM_KEY = "search";
     public static final List<String> VIDEO_CATEGORIES = Arrays.asList("unboxing", "review");
-    private Map<String, Map> videoLinksByService;
+    private List<String> videos;
 
     private final YouTubeAPIService youTubeAPIService;
     private final VimeoAPIService vimeoAPIService;
@@ -27,12 +27,11 @@ public class VideoAPIController {
     public JSONObject getVideoLinks(Request request, Response response) throws IOException, URISyntaxException {
         String searchKey = request.queryParams(SEARCH_PARAM_KEY);
         //todo: exceptions for wrong parameter
-        videoLinksByService = new HashMap<>();
-        Map<String, String> videosByCategory = new HashMap<>();
-        videoLinksByService.put("youtube", videosByCategory);
+        videos = new ArrayList<String>();
+
         for (int i = 0; i < VIDEO_CATEGORIES.size(); i++) {
 
-            videoLinksByService.put(VIDEO_CATEGORIES.get(i), youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i)));
+            videos.add(youTubeAPIService.getVideoFromYoutube(searchKey+"+"+ VIDEO_CATEGORIES.get(i)));
             //videoLinksByService.put("vimeo", vimeoAPIService.getVideosFromVimeo(searchKey));
 
         }
@@ -41,7 +40,7 @@ public class VideoAPIController {
     }
 
     private JSONObject resultToJSON() {
-        return new JSONObject().put("result", videoLinksByService);
+        return new JSONObject().put("result", videos);
     }
 
     public String status(Request request, Response response) {

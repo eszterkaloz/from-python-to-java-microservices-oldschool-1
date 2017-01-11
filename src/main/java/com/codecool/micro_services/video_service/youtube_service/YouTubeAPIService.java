@@ -36,7 +36,7 @@ public class YouTubeAPIService {
         return INSTANCE;
     }
 
-    public Map<String, String> getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
+    public String getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
         logger.info("Getting a video from Youtube api");
         URIBuilder builder = new URIBuilder(API_URL);
 
@@ -56,7 +56,7 @@ public class YouTubeAPIService {
         return getVideoFromYoutubeJSONParser(builder.build());
     }
 
-    private Map<String, String> getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
+    private String getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
         String result = null;
         JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
 
@@ -70,9 +70,7 @@ public class YouTubeAPIService {
             logger.error("JSONException found, there might not be a video linked to this search word");
         }
 
-        Map<String, String> videosByCategory = new HashMap<>();
-        videosByCategory.put("youtube", result);
-        return videosByCategory;
+        return result;
     }
 
     private String execute(URI uri) throws IOException {
