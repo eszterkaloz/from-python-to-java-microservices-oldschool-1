@@ -94,8 +94,8 @@ If the search string is less than 3 characters long, it is considered to be too 
 
 The project can be cloned from GitHub by issuing the command 
 `git clone https://github.com/CodecoolBP20161/from-python-to-java-microservices-oldschool-1.git`, 
-and opened by IntelliJ IDEA. The entry point of the service is the `Servlet` class
+and opened by IntelliJ IDEA. The entry point of the service is the `Servlet` class.
 
 ### Configuration
 
-The required port where the service is to be launched can be specified as the first argument. If omitted the port defaults to `60000`
+The required port where the service is to be launched can be specified as the first command line argument. If omitted the port defaults to `60000`.
