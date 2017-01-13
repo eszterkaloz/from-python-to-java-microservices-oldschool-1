@@ -32,7 +32,7 @@ public class VideoAPIController {
         if (searchKey.length() <= 2) {
             response.status(400);
             return new JSONObject()
-                    .put("error_type", "Bad request. Request parameter is missing or too low?")
+                    .put("error_type", "Bad request. Request parameter is missing or too short?")
                     .put("error_code", 400).toString();
         }
 
@@ -56,7 +56,7 @@ public class VideoAPIController {
 
     private String responseBuilder(String title, String embedCode, String provider, String category) {
         return new JSONObject()
-                .put("title", title)
+                .put("key", title)
                 .put("embed code", embedCode)
                 .put("provider", provider)
                 .put("category", category).toString();

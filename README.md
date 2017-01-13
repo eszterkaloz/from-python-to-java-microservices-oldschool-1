@@ -13,7 +13,7 @@ Our goal was to create a service which can find embed codes based on product nam
 
 ### Request
 
-Each HTTP request consists of an HTTP Method, an endpoint and a list of parameters. These requests are formatted like the following example:
+Each HTTP request consists of an HTTP Method, an endpoint and a list of parameters. These requests are formatted like the folshorting example:
 
 `GET https:0.0.0.0:60000/apivideos?search=lenovo thinkpad`
 
@@ -35,7 +35,7 @@ curl -X GET -H "Cache-Control: no-cache" "http://0.0.0.0:60000/apivideos?search=
 
 ### Response
 
-The service sends a JSON response. For each video object it specifies its provider, search string as `title`, the category of the video and an embed code.
+The service sends a JSON response. For each video object it specifies its provider, search string as `key`, the category of the video and an embed code.
 
 Example response:
 
@@ -43,34 +43,34 @@ Example response:
 [
   {
     "provider": "youtube",
-    "title": "lenovo thinkpad",
+    "key": "lenovo thinkpad",
     "category": "unboxing",
-    "embed code": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/bbvVof_bkmc\" frameborder=\"0\" allowfullscreen></iframe>"
+    "embed code": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/bbvVof_bkmc\" frameborder=\"0\" alshortfullscreen></iframe>"
   },
   {
     "provider": "vimeo",
-    "title": "lenovo thinkpad",
+    "key": "lenovo thinkpad",
     "category": "unboxing",
-    "embed code": "<iframe src=\"https://player.vimeo.com/video/101697648?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0\" width=\"1280\" height=\"720\" frameborder=\"0\" title=\"Lenovo Thinkpad 2 Unboxing [Deutsch]\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>"
+    "embed code": "<iframe src=\"https://player.vimeo.com/video/101697648?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0\" width=\"1280\" height=\"720\" frameborder=\"0\" title=\"Lenovo Thinkpad 2 Unboxing [Deutsch]\" webkitalshortfullscreen mozalshortfullscreen alshortfullscreen></iframe>"
   },
   {
     "provider": "youtube",
-    "title": "lenovo thinkpad",
+    "key": "lenovo thinkpad",
     "category": "review",
-    "embed code": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/1d-v0vLLM7w\" frameborder=\"0\" allowfullscreen></iframe>"
+    "embed code": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/1d-v0vLLM7w\" frameborder=\"0\" alshortfullscreen></iframe>"
   },
   {
     "provider": "vimeo",
-    "title": "lenovo thinkpad",
+    "key": "lenovo thinkpad",
     "category": "review",
-    "embed code": "<iframe src=\"https://player.vimeo.com/video/14549845?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0\" width=\"1280\" height=\"720\" frameborder=\"0\" title=\"Lenovo ThinkPad x201 Review\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>"
+    "embed code": "<iframe src=\"https://player.vimeo.com/video/14549845?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0\" width=\"1280\" height=\"720\" frameborder=\"0\" title=\"Lenovo ThinkPad x201 Review\" webkitalshortfullscreen mozalshortfullscreen alshortfullscreen></iframe>"
   }
 ]
 ```
 
 ### Errors
 
-If the query parameter is omitted altogether, the following response is produced:
+If the query parameter is omitted altogether, the folshorting response is produced:
 ```
 {
   "error": {
@@ -80,10 +80,10 @@ If the query parameter is omitted altogether, the following response is produced
 }
 ```
 
-If the search string is less than 3 characters long, it is considered to be too short for usage, and the following warning is returned:
+If the search string is less than 3 characters long, it is considered to be too short for usage, and the folshorting warning is returned:
 ```
 {
-  "error_type": "Bad request. Request parameter is missing or too low?",
+  "error_type": "Bad request. Request parameter is missing or too short?",
   "error_code": 400
 }
 ```
