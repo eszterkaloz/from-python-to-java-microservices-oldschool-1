@@ -1,12 +1,13 @@
 # Video Search Service
 
-## Goal
-
-Our goal was to create a service which can find embed codes based on product names, so that these codes can be easily embedded to a webshop, where customers can watch product review without ever leaving the site.
 
 ## Summary
 
 This service searches for videos on multiple video sharing sites (currently YouTube and Vimeo), picks one for the categories 'review' and 'unboxing' and returns their embed codes in JSON.
+
+## Goal
+
+Our goal was to create a service which can find embed codes based on product names, so that these codes can be easily embedded to a webshop, where customers can watch product reviews without ever leaving the site.
 
 ## Usage
 
@@ -18,19 +19,18 @@ Each HTTP request consists of an HTTP Method, an endpoint and a list of paramete
 
   - Method: `GET`
   - Endpoint: `/apivideos`
-  - Parameter (required): `search`
+  - Parameter (required): `search`, more than 2 character long value
   
 HTTP request example:
 ```
 GET /apivideos?search=lenovo thinkpad HTTP/1.1
 Host: 0.0.0.0:60000
 Cache-Control: no-cache
-Postman-Token: 96b56ed6-46c8-c4ab-36df-44f4b1eb3adc
 ```
 
 cURL request example:
 ```
-curl -X GET -H "Cache-Control: no-cache" -H "Postman-Token: 504b5dea-5697-e6af-24ef-40afbdef1abd" "http://0.0.0.0:60000/apivideos?search=lenovo%20thinkpad"
+curl -X GET -H "Cache-Control: no-cache" "http://0.0.0.0:60000/apivideos?search=lenovo%20thinkpad"
 ```
 
 ### Response
@@ -67,3 +67,35 @@ Example response:
   }
 ]
 ```
+
+### Errors
+
+If the query parameter is omitted altogether, the following response is produced:
+```
+{
+  "error": {
+    "error_type": "Unexpected error occurred",
+    "error_code": 500
+  }
+}
+```
+
+If the search string is less than 3 characters long, it is considered to be too short for usage, and the following warning is returned:
+```
+{
+  "error_type": "Bad request. Request parameter is missing or too low?",
+  "error_code": 400
+}
+```
+
+## Install and config
+
+### Installation
+
+The project can be cloned from GitHub by issuing the command 
+`git clone https://github.com/CodecoolBP20161/from-python-to-java-microservices-oldschool-1.git`, 
+and opened by IntelliJ IDEA. The entry point of the service is the `Servlet` class
+
+### Configuration
+
+The required port where the service is to be launched can be specified as the first argument. If omitted the port defaults to `60000`
