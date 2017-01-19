@@ -12,12 +12,22 @@ import java.net.URISyntaxException;
 
 import static spark.Spark.*;
 
+/**
+ * @author      Oldschool
+ * @version     1.0
+ * @since       13/01/17
+ */
 
 public class Servlet {
     private static final Logger logger = LoggerFactory.getLogger(Servlet.class);
     private VideoAPIController controller;
     private static final int DEFAULT_PORT = 60000;
 
+    /**
+     *
+     * @param args will be used for setting up the port,
+     *             if omitted, the system defaults to 60000
+     */
     public static void main(String[] args) {
         logger.debug("Starting " + Servlet.class.getName() + "...");
 
@@ -55,6 +65,10 @@ public class Servlet {
 
     }
 
+    /**
+     * Setting up port
+     * @param args app args
+     */
     private static void setup(String[] args) {
         if (args == null || args.length == 0) {
             port(DEFAULT_PORT);
