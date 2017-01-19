@@ -13,10 +13,12 @@ import org.thymeleaf.util.StringUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+/**
+ * @author      Oldschool
+ * @version     1.0
+ * @since       13/01/17
+ */
 
 public class YouTubeAPIService {
     private static final Logger logger = LoggerFactory.getLogger(YouTubeAPIService.class);
@@ -29,6 +31,11 @@ public class YouTubeAPIService {
 
     private static YouTubeAPIService INSTANCE;
 
+    /**
+     * Implements the singleton design pattern
+     *
+     * @return instance of the class
+     */
     public static YouTubeAPIService getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new YouTubeAPIService();
@@ -36,6 +43,16 @@ public class YouTubeAPIService {
         return INSTANCE;
     }
 
+    /**
+     * Builds an URI with the given search key
+     * and executes the request using the
+     * Youtube API service
+     *
+     * @param productName used as a search string, not null
+     * @return getVideoFromYoutubeParser(URI uri)
+     * @throws IOException input or output operation is failed or interpreted
+     * @throws URISyntaxException URI building error
+     */
     public String getVideoFromYoutube(String productName) throws IOException, URISyntaxException {
         logger.info("Getting a video from Youtube api");
         URIBuilder builder = new URIBuilder(API_URL);
@@ -44,7 +61,7 @@ public class YouTubeAPIService {
         builder.addParameter(TYPE_PARAM_KEY, "video");
 
         if (!StringUtils.isEmpty(productName)) {
-            builder.addParameter(QUERY_PARAM_KEY, productName );
+            builder.addParameter(QUERY_PARAM_KEY, productName);
         }
 
         builder.addParameter(MAX_RESULTS_PARAM_KEY, "1");
@@ -56,6 +73,14 @@ public class YouTubeAPIService {
         return getVideoFromYoutubeJSONParser(builder.build());
     }
 
+    /**
+     * Parse JSON received from the API
+     *
+     * @param uri the URI for the video service
+     * @return embed code
+     * @throws IOException input or output operation is failed or interpreted
+     * @throws URISyntaxException URI building error
+     */
     private String getVideoFromYoutubeJSONParser(URI uri) throws IOException, URISyntaxException{
         String result = null;
         JSONArray items = new JSONObject(execute(uri)).getJSONArray("items");
@@ -73,6 +98,13 @@ public class YouTubeAPIService {
         return embed;
     }
 
+    /**
+     * Executes the actual GET request against the given URI
+     *
+     * @param uri obj containing path and params.
+     * @return response JSON as string
+     * @throws IOException input or output operation is failed or interpreted
+     */
     private String execute(URI uri) throws IOException {
         return Request.Get(uri)
                 .addHeader("Accept", "text/plain")

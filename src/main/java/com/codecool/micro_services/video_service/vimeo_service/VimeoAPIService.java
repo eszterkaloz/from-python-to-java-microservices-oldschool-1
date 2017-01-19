@@ -3,8 +3,10 @@ package com.codecool.micro_services.video_service.vimeo_service;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +14,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-// TODO: proper logging
+/**
+ * @author      Oldschool
+ * @version     1.0
+ * @since       13/01/17
+ */
 
 public class VimeoAPIService {
     private static final Logger logger = LoggerFactory.getLogger(VimeoAPIService.class);
@@ -21,6 +27,11 @@ public class VimeoAPIService {
 
     private static VimeoAPIService INSTANCE;
 
+    /**
+     * Implements the singleton design pattern
+     *
+     * @return instance of the class
+     */
     public static VimeoAPIService getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new VimeoAPIService();
@@ -28,6 +39,16 @@ public class VimeoAPIService {
         return INSTANCE;
     }
 
+    /**
+     * Builds an URI with the given search key
+     * and executes the request using the
+     * Vimeo API service
+     *
+     * @param searchExpression used as a search string, not null
+     * @return getLinkFromJSON(String jsonString)
+     * @throws IOException input or output operation is failed or interpreted
+     * @throws URISyntaxException URI building error
+     */
     public String getVideoFromVimeo(String searchExpression) throws IOException, URISyntaxException {
         URIBuilder uriBuilder = new URIBuilder(API_URL);
         uriBuilder.addParameter("page", "1");  //optional
@@ -40,13 +61,18 @@ public class VimeoAPIService {
         String response = execute(uriBuilder.build());
         logger.debug("HTTP response received: {}", response);
 
-        String embedCode = getLinkFromJSON(response);
-        logger.debug("Link from Vimeo response JSON: {}", embedCode);
+        logger.debug("Link from Vimeo response JSON: {}", getLinkFromJSON(response));
 
-        return embedCode;
+        return getLinkFromJSON(response);
     }
 
-
+    /**
+     * Executes the actual GET request against the given URI
+     *
+     * @param uri obj containing path and params.
+     * @return response JSON as string
+     * @throws IOException input or output operation is failed or interpreted
+     */
     private String execute(URI uri) throws IOException {
         return Request.Get(uri)
                 .addHeader("Authorization", AUTH_TOKEN)
@@ -55,6 +81,12 @@ public class VimeoAPIService {
                 .asString();
     }
 
+    /**
+     * Parse JSON received from the API
+     *
+     * @param jsonString - JSON from the API
+     * @return - embed code
+     */
     private String getLinkFromJSON(String jsonString) {
         JSONObject json = new JSONObject(jsonString);
         JSONArray dataArray = (JSONArray) json.get("data");
